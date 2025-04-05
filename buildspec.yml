@@ -17,12 +17,21 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      
+      - docker build -t cicdncplimage .
+      - docker tag cicdncplimage:latest rajcosivadevops/cicdncplimage:latest
 
   post_build:
     commands:
       - echo Pushing Docker image to Docker Hub...
-      -
+      - docker push rajcosivadevops/cicdncplimage:latest
+      - echo Writing imagedefinitions.json...
+      - ls -l
+      - printf '[{"name":"sprinrajco","imageUri":"rajcosivadevops/cicdncplimage:latest"}]' > imagedefinitions.json
+      - echo Writing appspec.yml...
+      
+
 artifacts:
   files:
-    -  target/demo-1.0.0.jar
+    - imagedefinitions.json
+    - appspec.yml
+    - target/demo-1.0.0.jar
